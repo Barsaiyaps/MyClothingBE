@@ -8,11 +8,8 @@ const auth=(req,res,next)=>{
         const decoded=jwt.verify(token,TOKEN)
         const user=decoded.userData
         console.log(user)
-        if(user.permission=="admin"){
-            next()
-        }else{
-            res.send({message:"You are not authorized"})
-        }
+        req.body.userId=user._id
+        next()
     } catch (error) {
         res.send({message:"Something went wrong",error})
     }
