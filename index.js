@@ -5,11 +5,13 @@ const PORT=process.env.PORT || 5000;
 const connectDb = require("./connectDb");
 const cors = require("cors");
 const userRoute = require("./routes/user.route");
+const sellerRoute = require("./routes/seller.route");
 
 
 app.use(cors());
 app.use(express.json());
 
+app.use("/seller",userRoute);
 app.use("/user",userRoute);
 
 app.listen(PORT, async() => {
