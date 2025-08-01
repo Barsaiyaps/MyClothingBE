@@ -48,7 +48,7 @@ sellerRoute.post("/login", async (req, res) => {
 
 sellerRoute.get("/dashboard",auth,async(req,res)=>{
     const data=await sellerModel.findById(req.body.seller).populate("products")
-    res.send(data.products)
+    res.send(data)
 })
 
 

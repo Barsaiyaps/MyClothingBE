@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const userRoute = express.Router();
 const bcrypt = require("bcrypt");
+const userAuth = require("../midddleWares/userAuthMiddleWare");
+const productModel = require("../models/product.model");
 const JWT_TOKEN=process.env.JWT_TOKEN
 const HASH_ROUNDS = parseInt(process.env.HASHED_COUNT);
 
@@ -39,6 +41,31 @@ userRoute.post("/login", async (req, res) => {
         res.send(error);
     }
 });
+
+userRoute.post("/add-to-cart/:id",userAuth,async(req,res)=>{
+   const user=await userModel.findById(req.body.user)
+   const product=await productModel.findById(req.params.id)
+   console.log(product)
+   await user.cart.push(product)
+   await user.save()
+   res.send({msg:"Product added to cart",user})
+
+})
+
+userRoute.post("/remove-from-cart/:id",userAuth,async(req,res)=>{
+    const user=await userModel.findById(req.body.user)
+    const product=await productModel.findById(req.params.id)
+    await user.cart.pull(product)
+    await user.save()
+    res.send({msg:"Product removed from cart",user})
+  
+
+})
+
+userRoute.get("/user-cart",userAuth,async(req,res)=>{
+    const data=await userModel.findById(req.body.user).populate("cart")
+    res.send(data.cart)
+})
 
 module.exports = userRoute
 

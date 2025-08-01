@@ -21,8 +21,6 @@ productRoute.post("/add-product",auth,async(req,res)=>{
     }
 })
 
-
-
 productRoute.delete("/delete/:id",auth,async(req,res)=>{
     const data=await productModel.findByIdAndDelete(req.params.id)
     res.send(data)
