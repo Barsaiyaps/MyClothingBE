@@ -1,6 +1,7 @@
 require("dotenv").config()
 const express = require("express");
 const userModel = require("../models/user.model");
+const sellerModel = require("../models/seller.model");
 const jwt = require("jsonwebtoken");
 const userRoute = express.Router();
 const bcrypt = require("bcrypt");
@@ -64,6 +65,17 @@ userRoute.post("/remove-from-cart/:id",userAuth,async(req,res)=>{
 userRoute.get("/user-cart",userAuth,async(req,res)=>{
     const data=await userModel.findById(req.body.user).populate("cart")
     res.send(data.cart)
+})
+
+userRoute.get("/all-seller",userAuth,async(req,res)=>{
+    const data=await sellerModel.find()
+    res.send(data)
+})
+
+userRoute.get("/seller-product/:id",async(req,res)=>{
+    const id=req.params.id
+    const data=await sellerModel.findById(id).populate("products")
+    res.send(data)
 })
 
 module.exports = userRoute
